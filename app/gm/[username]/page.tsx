@@ -15,14 +15,26 @@ export default async function GrandMaster({
 }: {
   params: { username: string };
 }) {
-  const data = await fetch(
-    `https://api.chess.com/pub/player/${params.username}`
-  );
-  const gm = await data.json();
+  const { username } = await params;
+  let gm = null;
+  let error = null;
+
+  try {
+    const data = await fetch(`https://api.chess.com/pub/player/${username}`);
+    gm = await data.json();
+  } catch (err) {
+    error = "Could not load player data.";
+  }
 
   return (
     <div className={styles.page}>
-      <main className={styles.main}>{gm.name}</main>
+      <main className={styles.main}>
+        {error ? (
+          <div>{error}</div>
+        ) : (
+          gm?.name || gm?.username || "No player data found."
+        )}
+      </main>
       <footer className={styles.footer}>
         <a
           href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"

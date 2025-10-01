@@ -3,20 +3,32 @@ import styles from "../page.module.css";
 import Link from "next/link";
 
 export default async function GrandMasters() {
-  const data = await fetch("https://api.chess.com/pub/titled/GM");
-  const gms = await data.json();
+  let gms = null;
+  let error = null;
 
-  console.log({ gms });
+  try {
+    const data = await fetch("https://api.chess.com/pub/titled/GM");
+    gms = await data.json();
+  } catch (err) {
+    error = "Could not load players";
+  }
+
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <ol>
-          {gms.players.map((gm: string) => (
-            <li key={gm}>
-              <Link href={`/gm/${gm}`}>{gm}</Link>
-            </li>
-          ))}
-        </ol>
+        {error ? (
+          <div>{error}</div>
+        ) : gms?.players?.length ? (
+          <ol>
+            {gms.players.map((gm: string) => (
+              <li key={gm}>
+                <Link href={`/gm/${gm}`}>{gm}</Link>
+              </li>
+            ))}
+          </ol>
+        ) : (
+          <div>No players available.</div>
+        )}
       </main>
       <footer className={styles.footer}>
         <a

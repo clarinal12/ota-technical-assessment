@@ -24,6 +24,7 @@ export default async function GrandMaster({
   try {
     const data = await fetch(`https://api.chess.com/pub/player/${username}`);
     gm = await data.json();
+    console.log({ gm, data });
   } catch (err) {
     error = "Could not load player data.";
   }

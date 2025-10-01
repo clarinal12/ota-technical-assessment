@@ -13,14 +13,13 @@ export async function generateStaticParams() {
 export default async function GrandMaster({
   params,
 }: {
-  params: Promise<{ username: string }>;
+  params: { username: string };
 }) {
   const data = await fetch(
     `https://api.chess.com/pub/player/${params.username}`
-  )
+  );
   const gm = await data.json();
 
-  console.log({ gm });
   return (
     <div className={styles.page}>
       <main className={styles.main}>{gm.name}</main>

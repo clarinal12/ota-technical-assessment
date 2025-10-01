@@ -1,6 +1,8 @@
 import Image from "next/image";
 import styles from "../../page.module.css";
 
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const data = await fetch("https://api.chess.com/pub/titled/GM");
   const gms = await data.json();

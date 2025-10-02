@@ -41,6 +41,7 @@ export default function Profile(props: ProfileComponentProps) {
 
   const [profileState, setProfileState] = useState(defaultProfile);
 
+  // Client side request as fallback if no profileData is passed from server
   useEffect(() => {
     if (!profileData) {
       featchProfile(username).then((data) => {

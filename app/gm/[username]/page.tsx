@@ -47,13 +47,12 @@ export default async function GrandMaster({
 }: GrandMasterParams): Promise<JSX.Element> {
   const { username } = await params;
   let gm: ProfileProps | null = null;
-  let error: string | null = null;
 
   try {
     const data = await fetch(`https://api.chess.com/pub/player/${username}`);
     gm = await data.json();
   } catch (err) {
-    error = "Could not load player data.";
+    console.error("Error fetching GM data:", err);
   }
 
   return (
@@ -63,11 +62,9 @@ export default async function GrandMaster({
           Back to Grandmasters
         </Link>
       </div>
-      {error ? (
-        <div>{error}</div>
-      ) : (
-        <div>{<Profile username={username} profileData={gm} />}</div>
-      )}
+      <div>
+        <Profile username={username} profileData={gm} />
+      </div>
     </main>
   );
 }

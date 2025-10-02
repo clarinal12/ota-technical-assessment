@@ -1,25 +1,31 @@
 import Image from "next/image";
-import styles from "../../page.module.css";
+import styles from "@/app/page.module.css";
+import Profile, { ProfileProps } from "@/components/Profile/profile.component";
+import Link from "next/link";
+import { JSX } from "react";
 
 export const revalidate = 60;
 
-export async function generateStaticParams() {
-  const data = await fetch("https://api.chess.com/pub/titled/GM");
-  const gms = await data.json();
+type ChessComGMs = {
+  players: string[];
+};
 
-  return gms.players.map((gm: string) => ({
-    username: gm,
-  }));
+export async function generateStaticParams(): Promise<{ username: string }[]> {
+  const data = await fetch("https://api.chess.com/pub/titled/GM");
+  const gms: ChessComGMs = await data.json();
+  return gms.players.map((gm: string) => ({ username: gm }));
 }
+
+type GrandMasterParams = {
+  params: { username: string };
+};
 
 export default async function GrandMaster({
   params,
-}: {
-  params: { username: string };
-}) {
+}: GrandMasterParams): Promise<JSX.Element> {
   const { username } = await params;
-  let gm = null;
-  let error = null;
+  let gm: ProfileProps | null = null;
+  let error: string | null = null;
 
   try {
     const data = await fetch(`https://api.chess.com/pub/player/${username}`);
@@ -29,58 +35,19 @@ export default async function GrandMaster({
   }
 
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        {error ? (
-          <div>{error}</div>
-        ) : (
-          gm?.name || gm?.username || "No player data found."
-        )}
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+    <main className={styles.main}>
+      {error ? (
+        <div>{error}</div>
+      ) : (
+        <div>
+          <div className={styles.ctas}>
+            <Link className={styles.secondary} href="/gm">
+              Back to Grandmasters
+            </Link>
+          </div>
+          <div>{gm && <Profile {...gm} />}</div>
+        </div>
+      )}
+    </main>
   );
 }

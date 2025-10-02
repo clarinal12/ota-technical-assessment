@@ -1,0 +1,44 @@
+.profile {
+  padding: 48px 16px;
+}
+
+.profileLink {
+  margin-top: 16px;
+}
+
+.avatar {
+  margin-bottom: 32px;
+}
+
+.heading {
+  display: flex;
+  gap: 40px;
+}
+
+.details {
+  padding: 16px 0;
+}
+
+.headingRight {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dataList {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.dataListItem {
+  display: inline-flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.dataListItemLabel {
+  color: #a1a1aa;
+  min-width: 120px;
+}

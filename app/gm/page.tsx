@@ -1,4 +1,6 @@
 import styles from "@/app/page.module.css";
+import GrandMasterList from "@/components/GrandmasterList/grandmaster-list.component";
+import Pagination from "@/components/Pagination/pagination.component";
 import Link from "next/link";
 import { JSX } from "react";
 
@@ -23,13 +25,7 @@ export default async function GrandMasters(): Promise<JSX.Element> {
       {error ? (
         <div>{error}</div>
       ) : gms?.players?.length ? (
-        <ol>
-          {gms.players.map((gm: string) => (
-            <li key={gm}>
-              <Link href={`/gm/${gm}`}>{gm}</Link>
-            </li>
-          ))}
-        </ol>
+        <GrandMasterList players={gms.players} />
       ) : (
         <div>No players available.</div>
       )}

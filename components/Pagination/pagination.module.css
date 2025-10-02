@@ -1,0 +1,31 @@
+.pagination {
+  margin-top: 24px;
+  display: flex;
+  gap: 10px;
+}
+
+.pageButton {
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.pageNumberButton {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.pageNumberButtonSelected {
+  padding: 4px 8px;
+  border: 1px solid #ccc;
+  cursor: pointer;
+  background-color: #ddd;
+  color: #000;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.pageButton:disabled {
+  cursor: not-allowed;
+}

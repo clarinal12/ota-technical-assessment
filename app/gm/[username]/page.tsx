@@ -1,4 +1,3 @@
-import Image from "next/image";
 import styles from "@/app/page.module.css";
 import Profile from "@/components/Profile/profile.component";
 import Link from "next/link";

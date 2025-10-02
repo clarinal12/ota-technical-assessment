@@ -1,54 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import styles from "./profile.module.css";
 import pageStyles from "@/app/page.module.css";
 import Image from "next/image";
 import { countryCodeToEmoji } from "@/utils/countries";
-import { formatTime, formatUnixDate } from "@/utils/format";
+import { formatUnixDate } from "@/utils/format";
+import { ProfileProps } from "./profile.types";
+import LastActive from "../LastActive/last-active.component";
 
-interface LastActiveProps {
-  timestamp: number;
-}
-
-export function LastActive({ timestamp }: LastActiveProps) {
-  const displayRef = useRef<HTMLSpanElement>(null); // ref to hold the DOM element
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const now = Date.now();
-      const diff = Math.floor(now / 1000 - timestamp);
-      if (displayRef.current) {
-        displayRef.current.textContent = formatTime(diff >= 0 ? diff : 0);
-      }
-    }, 1000);
-
-    return () => clearInterval(interval);
-  }, [timestamp]);
-
-  return (
-    <span suppressHydrationWarning ref={displayRef}>
-      {formatTime(Math.floor(Date.now() / 1000 - timestamp))}
-    </span>
-  );
-}
-
-export interface ProfileProps {
-  avatar?: string;
-  name: string;
-  username: string;
-  country?: string;
-  followers: number;
-  url: string;
-  last_online: number;
-  joined: number;
-  title: string;
-  league: string;
-  location: string;
-  is_streamer: boolean;
-  verified: boolean;
-  status: string;
-}
 
 export default function Profile(props: ProfileProps) {
   const countryCode = (props.country || "").split("/").pop();

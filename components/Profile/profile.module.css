@@ -30,13 +30,20 @@
   gap: 16px;
 }
 
+.dataList {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
 .dataListItem {
   display: inline-flex;
   align-items: center;
   gap: 24px;
 }
 
-.dataListItemLabel {
+.dataListItem dt {
   color: #a1a1aa;
   min-width: 120px;
 }

@@ -59,17 +59,15 @@ export default async function GrandMaster({
 
   return (
     <main className={styles.main}>
+      <div className={styles.ctas}>
+        <Link className={styles.secondary} href="/gm">
+          Back to Grandmasters
+        </Link>
+      </div>
       {error ? (
         <div>{error}</div>
       ) : (
-        <div>
-          <div className={styles.ctas}>
-            <Link className={styles.secondary} href="/gm">
-              Back to Grandmasters
-            </Link>
-          </div>
-          <div>{gm && <Profile {...gm} />}</div>
-        </div>
+        <div>{<Profile username={username} profileData={gm} />}</div>
       )}
     </main>
   );

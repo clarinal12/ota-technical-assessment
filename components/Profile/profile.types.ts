@@ -2,7 +2,7 @@ export interface ProfileProps {
   avatar?: string;
   name: string;
   username: string;
-  country?: string;
+  country: string;
   followers: number;
   url: string;
   last_online: number;
@@ -13,4 +13,8 @@ export interface ProfileProps {
   is_streamer: boolean;
   verified: boolean;
   status: string;
+}
+export interface ProfileComponentProps {
+  username: string;
+  profileData: ProfileProps | null;
 }

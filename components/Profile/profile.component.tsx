@@ -1,39 +1,79 @@
 "use client";
 
-import React from "react";
+import React, { use, useEffect, useState } from "react";
 import styles from "./profile.module.css";
 import pageStyles from "@/app/page.module.css";
 import Image from "next/image";
 import { countryCodeToEmoji } from "@/utils/countries";
 import { formatUnixDate } from "@/utils/format";
-import { ProfileProps } from "./profile.types";
+import { ProfileComponentProps } from "./profile.types";
 import LastActive from "../LastActive/last-active.component";
 
+const defaultProfile = {
+  avatar: "",
+  name: "",
+  username: "",
+  country: "",
+  followers: "",
+  url: "",
+  last_online: 0,
+  joined: 0,
+  title: "",
+  league: "",
+  location: "",
+  is_streamer: false,
+  verified: false,
+  status: "",
+};
 
-export default function Profile(props: ProfileProps) {
-  const countryCode = (props.country || "").split("/").pop();
+const featchProfile = async (username: string) => {
+  const response = await fetch(`https://api.chess.com/pub/player/${username}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch weather");
+  }
+
+  const responseJson = await response.json();
+  return responseJson;
+};
+
+export default function Profile(props: ProfileComponentProps) {
+  const { profileData, username } = props;
+
+  const [profileState, setProfileState] = useState(defaultProfile);
+
+  useEffect(() => {
+    if (!profileData) {
+      featchProfile(username).then((data) => {
+        setProfileState(data);
+      });
+    }
+  }, [profileData, username]);
+
+  const profile = profileData || profileState;
+  const countryCode = (profile.country || "").split("/").pop();
+
   return (
     <div className={styles.profile}>
       <div className={styles.heading}>
         <Image
           className={styles.avatar}
-          src={props?.avatar || "/profile.svg"}
-          alt={`${props?.name ?? props.username} logo`}
+          src={profile?.avatar || "/profile.svg"}
+          alt={`${profile?.name ?? username} logo`}
           width={160}
           height={160}
           priority
         />
         <div className={styles.headingRight}>
-          <span>{props.username}</span>
+          <span>{username}</span>
           <h2>
-            {countryCodeToEmoji(countryCode)} {props.name || 'Anonymous'}
+            {countryCodeToEmoji(countryCode)} {profile.name || "Anonymous"}
           </h2>
-          <span>{props.followers.toLocaleString()} Followers</span>
+          <span>{profile.followers.toLocaleString()} Followers</span>
           <div className={styles.profileLink}>
             <div className={pageStyles.ctas}>
               <a
                 className={pageStyles.primary}
-                href={props.url}
+                href={profile.url}
                 target="_blank"
                 rel="noreferrer"
               >
@@ -47,46 +87,38 @@ export default function Profile(props: ProfileProps) {
       <div className={styles.details}>
         <dl className={styles.dataList}>
           <div className={styles.dataListItem}>
-            <dt className={styles.dataListItemLabel}>Last Active</dt>
-            <dd className={styles.dataListItemValue}>
-              <LastActive timestamp={props.last_online} />
+            <dt>Last Active</dt>
+            <dd>
+              <LastActive timestamp={profile.last_online} />
             </dd>
           </div>
           <div className={styles.dataListItem}>
-            <dt className={styles.dataListItemLabel}>Joined</dt>
-            <dd className={styles.dataListItemValue}>
-              {formatUnixDate(props.joined)}
-            </dd>
+            <dt>Joined</dt>
+            <dd>{formatUnixDate(profile.joined)}</dd>
           </div>
           <div className={styles.dataListItem}>
-            <dt className={styles.dataListItemLabel}>Title</dt>
-            <dd className={styles.dataListItemValue}>{props.title}</dd>
+            <dt>Title</dt>
+            <dd>{profile.title}</dd>
           </div>
           <div className={styles.dataListItem}>
-            <dt className={styles.dataListItemLabel}>League</dt>
-            <dd className={styles.dataListItemValue}>{props.league}</dd>
+            <dt>League</dt>
+            <dd>{profile.league}</dd>
           </div>
           <div className={styles.dataListItem}>
-            <dt className={styles.dataListItemLabel}>Location</dt>
-            <dd className={styles.dataListItemValue}>{props.location}</dd>
+            <dt>Location</dt>
+            <dd>{profile.location}</dd>
           </div>
           <div className={styles.dataListItem}>
-            <dt className={styles.dataListItemLabel}>Streamer</dt>
-            <dd className={styles.dataListItemValue}>
-              {props.is_streamer ? "Yes" : "No"}
-            </dd>
+            <dt>Streamer</dt>
+            <dd>{profile.is_streamer ? "Yes" : "No"}</dd>
           </div>
           <div className={styles.dataListItem}>
-            <dt className={styles.dataListItemLabel}>Verified</dt>
-            <dd className={styles.dataListItemValue}>
-              {props.verified ? "Yes" : "No"}
-            </dd>
+            <dt>Verified</dt>
+            <dd>{profile.verified ? "Yes" : "No"}</dd>
           </div>
           <div className={styles.dataListItem}>
-            <dt className={styles.dataListItemLabel}>Status</dt>
-            <dd className={styles.dataListItemValue}>
-              {props.status.toUpperCase()}
-            </dd>
+            <dt>Status</dt>
+            <dd>{profile.status.toUpperCase()}</dd>
           </div>
         </dl>
       </div>

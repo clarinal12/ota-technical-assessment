@@ -14,7 +14,7 @@ const GrandMasterList: React.FC<GrandMasterListProps> = ({ players }) => {
 
   return (
     <div>
-      <ol>
+      <ol start={startIdx + 1}>
         {currentItems.map((gm: string) => (
           <li key={gm}>
             <Link href={`/gm/${gm}`}>{gm}</Link>
